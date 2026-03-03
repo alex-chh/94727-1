@@ -7,7 +7,7 @@
 - 網域：SME.LOCAL
 - 工具：Rubeus.exe、StandIn.exe
 - 腳本：
-  - 權限驗證：[verify_rbcd_permissions.ps1](file:///c:/Users/aduser/Desktop/PCT/94727/verify_rbcd_permissions.ps1)
+  - 權限驗證：[verify_rbcd_permissions_clean.ps1](file:///c:/Users/aduser/Desktop/PCT/94727/verify_rbcd_permissions_clean.ps1)
   - 權限配置（最小 WriteProperty）：[setup_rbcd_lab.ps1](file:///c:/Users/aduser/Desktop/PCT/94727/setup_rbcd_lab.ps1)
   - 清理：[cleanup_rbcd.ps1](file:///c:/Users/aduser/Desktop/PCT/94727/cleanup_rbcd.ps1)
 - 詳細教學：[RBCD_Walkthrough.md](file:///c:/Users/aduser/Desktop/PCT/94727/RBCD_Walkthrough.md)
@@ -23,7 +23,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 
 1) 驗證攻擊者帳號是否有對目標電腦物件的寫入權限
 ```powershell
-.\verify_rbcd_permissions.ps1 -TargetComputer "EC2AMAZ-V903HM1" -AttackerUser "aduser"
+.\verify_rbcd_permissions_clean.ps1 -TargetComputer "EC2AMAZ-V903HM1" -AttackerUser "aduser"
 ```
 
 若顯示 NOT VULNERABLE，授權權限（二選一）：
