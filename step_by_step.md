@@ -24,7 +24,7 @@ Add-WindowsCapability -Online -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 ```
 
-### 1.2 驗證權限
+### 1.2 驗證權限 (在DC上執行)
 ```powershell
 # 檢查攻擊者是否有權限修改目標電腦物件
 .\verify_rbcd_permissions_clean.ps1 -TargetComputer "EC2AMAZ-V903HM1" -AttackerUser "aduser"
